@@ -1,4 +1,4 @@
-# WHO IS VANGOGH
+# WHOSE IS VANGOGH
 A deep learning project to submit for project showcase challenge in Facebook Pytorch Scholarship Challenge. I make this project to test my knowledge on what I learned and to satisfy my enthusiast of bringing what I learn into solving some real problems.
 
 # Introduction
