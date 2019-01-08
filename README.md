@@ -23,17 +23,9 @@ Link to first dataset:
 
 Because of this, I went on to create a new dataset which uses the same Van Gogh's paintings from the first one, but replace all non-Van Gogh paintings by ones from a single artist. The artist that I chose is Aja Kusick (https://www.instagram.com/sagittariusgallery/?hl=en). Her paintings adopt Van Gogh's style and mix it with modern objects like characters from cartoons or movies (like Starwar). With this dataset, I predict that the accuracy will be higher.
 
-Link to the second dataset:
-```sh
-
-```
-
 How about the third one ? Well, I'm a curiosity one so I would like to see what if there's less variance in the non-Van Gogh dataset, will the model perform better compared to its performance over the first one. This time I chose Picasso as I figured out his paintings belong to two styles, according to me. 
 
-Link to the third dataset:
-```sh
-
-```
+The third and second dataset is available in this Github repo in RAR archieve.
 
 ## Spliting data for training and testing
 All three datasets are split into training and testing at 80/20 ratio.
@@ -79,6 +71,14 @@ With first dataset, the accuracy varies from 65% to 70% on the test set. The mod
 With second dataset, as expected, the result is much better. In general the accuracy varies from 70% to 80%. Final, with the third dataset, the accuracy once again reduced to 65% to 70%.
 
 I went on to train my resnet18 model using GPU (on Google Colab) with 30 epochs. Resnet18 model performed much better than my model with 
-86% accuracy on my first dataset. With more convolutional layers being stacked upon each other. Resnet18 seems to dealt very well with variance of style in non-Van Gogh dataset. I may infer from this that the model will beat 90% or even more accuracy on the other two datasets
+86% accuracy on my first dataset. With more convolutional layers being stacked upon each other. Resnet18 seems to dealt very well with variance of style in non-Van Gogh dataset. I may infer from this that the model will beat 90% or even more accuracy on the other two datasets. And it's true. With second dataset resnet18 model archive 100% accuracy, this is a little bit unreal and there might be some bias. With the third one it achieved 96% accuracy.
+
+From this experiment, I learned that both data quality and model quality affects the accuracy of the prediction. Second, if a state-of-art model suits the problem you are trying to solve, then use it will save lots of time and unecessary effort.
+
+# Questions:
+This final section will list out questions that I haven't got time to see if I can answer it
+- If I apply the model that was trained on vgdb_2016 dataset, how will it perform on the other dataset ?
+- Besides resnet18, what other models can be applied to improve the accuracy ?
+- Because this seems like a binary classification, will using different loss function improve the performance ?
 
 
