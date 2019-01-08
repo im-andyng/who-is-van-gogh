@@ -44,25 +44,40 @@ I apply only one method of augumentation which is Random Resize Crop
 ## Normalization
 [0.5, 0.5, 0.5] is used for both mean and std
 
+## Loading dataset
+The image dataset is loaded using dataloader with bath_size=32
+
 ```python
 transform
 ```
 
 # The models
-I built two models to solve the challenge. One is a self-built convolutional neural network and the other one reused a pretrained neural network: Resnet18
+I built two models to solve the challenge. One is a self-built convolutional neural network and the other one reused a pretrained neural network: Resnet18. I train both models on three datasets to compare the performance.
 
 ## Self-built neural network
 This model is built with three convolutional layers and two fully connected layers. Each convolutional layers has a padding of 1 and stride of 1. Kernel size is 3 for all three convolutional layers. After each layer, I apply a ReLU activation function and insert a maxpooling layer (4x4) to reduce the dimension size and increase the depth. Through each layers, the input depth increases from 3 (RGB image) to 16, 32 and then 64.
 
-As the input is 512, the output volume of these convolutional neural networks is 64*8*8 (512/4/4/4 = 8). This output serves as input for the next two fully connected layers
+As the input is 512, the output volume of these convolutional neural networks is 64*8*8 (512/4/4/4 = 8). This output serves as input for the next two fully connected layers, which will output class score for vg (Van Gogh) or nvg (non-Van Gogh) paintings. 
+
+```python
+```
 
 ## Resnet18
+A pre-trained Resnet18 model is downloaded using torchvision. I freeze all the convolutional layers and adjust the fully connected layer to fit with my output.
+
+```python
+```
 
 # Training the network
+In this Github repositories, I provide the code for both self-built and resnet model. As the self-built one is pretty simple, I don't provide the checkpoint file as it takes only 10 to 15 minutes to train the model from scratch. With Google Colab one, I provide both the code with output and the checkpoint file to quickly reproduce the result.
 
-# Result
+# Result and key learning
+I train the self-built neural network with 10 epochs for each dataset. The trainning is done on CPU as my GPU does not have enough memory to run. 
 
-# Key learning
+
+
+
+With Resnet18, I employed Google Colab and train the model on GPU with 30 epochs
 
 
 
