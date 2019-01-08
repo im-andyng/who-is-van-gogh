@@ -78,10 +78,7 @@ With first dataset, the accuracy varies from 65% to 70% on the test set. The mod
 
 With second dataset, as expected, the result is much better. In general the accuracy varies from 70% to 80%. Final, with the third dataset, the accuracy once again reduced to 65% to 70%.
 
-I went on to train my resnet18 model
-
-
-With Resnet18, I employed Google Colab and train the model on GPU with 30 epochs
-
+I went on to train my resnet18 model using GPU (on Google Colab) with 30 epochs. Resnet18 model performed much better than my model with 
+86% accuracy on my first dataset. With more convolutional layers being stacked upon each other. Resnet18 seems to dealt very well with variance of style in non-Van Gogh dataset. I may infer from this that the model will beat 90% or even more accuracy on the other two datasets
 
 
