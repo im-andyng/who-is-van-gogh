@@ -18,7 +18,7 @@ I train my deep learning model on three differents dataset. Why 3? Because after
 
 Link to first dataset:
 ```sh
-
+https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/5870145/vgdb_2016.zip
 ```
 
 Because of this, I went on to create a new dataset which uses the same Van Gogh's paintings from the first one, but replace all non-Van Gogh paintings by ones from a single artist. The artist that I chose is Aja Kusick (https://www.instagram.com/sagittariusgallery/?hl=en). Her paintings adopt Van Gogh's style and mix it with modern objects like characters from cartoons or movies (like Starwar). With this dataset, I predict that the accuracy will be higher.
@@ -40,7 +40,26 @@ I apply only one method of augumentation which is Random Resize Crop
 The image dataset is loaded using dataloader with bath_size=32
 
 ```python
-transform
+train_transforms = transforms.Compose([transforms.RandomRotation(30),
+                                       transforms.RandomResizedCrop(224),
+                                       transforms.RandomHorizontalFlip(),
+                                       transforms.ToTensor(),
+                                       transforms.Normalize([0.485, 0.456, 0.406],
+                                                            [0.229, 0.224, 0.225])])
+
+valid_transforms = transforms.Compose([transforms.Resize(255),
+                                      transforms.CenterCrop(224),
+                                      transforms.ToTensor(),
+                                      transforms.Normalize([0.485, 0.456, 0.406],
+                                                           [0.229, 0.224, 0.225])])
+
+data_dir = "aja"
+
+train_data = datasets.ImageFolder(data_dir+"/train", transform=train_transforms)
+train_loader = torch.utils.data.DataLoader(train_data, batch_size=32, shuffle=True)
+
+valid_data = datasets.ImageFolder(data_dir+"/test", transform=valid_transforms)
+valid_loader = torch.utils.data.DataLoader(valid_data, batch_size=32, shuffle=True)
 ```
 
 # The models
@@ -52,16 +71,57 @@ This model is built with three convolutional layers and two fully connected laye
 As the input is 512, the output volume of these convolutional neural networks is 64*8*8 (512/4/4/4 = 8). This output serves as input for the next two fully connected layers, which will output class score for vg (Van Gogh) or nvg (non-Van Gogh) paintings. 
 
 ```python
+class Net(nn.Module):
+    def __init__(self):
+        super(Net, self).__init__()
+        # convolutional layer
+        self.conv1 = nn.Conv2d(3, 16, 3, padding=1)
+        self.conv2 = nn.Conv2d(16, 32, 3, padding=1)
+        self.conv3 = nn.Conv2d(32, 64, 3, padding=1)
+        # max pooling layer
+        self.pool = nn.MaxPool2d(4, 4)
+        # fully-connected layer
+        self.fc1 = nn.Linear(64*8*8, 2048)
+        self.fc2 = nn.Linear(2048,2)
+        self.drop = nn.Dropout(p=0.2)
+
+    def forward(self, x):
+        # add sequence of convolutional and max pooling layers
+        x = self.pool(F.relu(self.conv1(x)))
+        x = self.pool(F.relu(self.conv2(x)))
+        x = self.pool(F.relu(self.conv3(x)))
+        
+        x = x.view(-1, 64*8*8)
+        
+        x = self.drop(x)
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
+        
+        return x
 ```
 
 ## Resnet18
 A pre-trained Resnet18 model is downloaded using torchvision. I freeze all the convolutional layers and adjust the fully connected layer to fit with my output.
 
 ```python
+model = models.resnet18(pretrained=True)
+
+for param in model.parameters():
+  param.requires_grad = False
+  
+model.fc = nn.Linear(512, 2, bias=True)
 ```
+
+# Loss function and optimizer
+With self-built neural network, I use Cross Entropy Loss function (nn.CrossEntropyLoss()) and SGD optimizer. For resnet18, I also use Cross Entropy Loss but with Adam optimizer.
 
 # Training the network
 In this Github repositories, I provide the code for both self-built and resnet model. As the self-built one is pretty simple, I don't provide the checkpoint file as it takes only 10 to 15 minutes to train the model from scratch. With Google Colab one, I provide both the code with output and the checkpoint file to quickly reproduce the result.
+
+<b>Note: </b>
+- If you use Aja Kusnick or Picasso dataset to train the model, remember to copy vg folder in test and train folder of vgdb_2016 dataset to test and train folder in these dataset. 
+- Remember to change the folder name/path to the dataset
+- If you load the checkpoint, make sure it matches the file name.
 
 # Result and key learning
 I train the self-built neural network with 10 epochs for each dataset. The trainning is done on CPU as my GPU does not have enough memory to run. 
