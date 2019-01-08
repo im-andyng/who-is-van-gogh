@@ -44,8 +44,17 @@ I apply only one method of augumentation which is Random Resize Crop
 ## Normalization
 [0.5, 0.5, 0.5] is used for both mean and std
 
-# The model 
+```python
+transform
+```
+
+# The models
+I built two models to solve the challenge. One is a self-built convolutional neural network and the other one reused a pretrained neural network: Resnet18
+
 ## Self-built neural network
+This model is built with three convolutional layers and two fully connected layers. Each convolutional layers has a padding of 1 and stride of 1. Kernel size is 3 for all three convolutional layers. After each layer, I apply a ReLU activation function and insert a maxpooling layer (4x4) to reduce the dimension size and increase the depth. Through each layers, the input depth increases from 3 (RGB image) to 16, 32 and then 64.
+
+As the input is 512, the output volume of these convolutional neural networks is 64*8*8 (512/4/4/4 = 8). This output serves as input for the next two fully connected layers
 
 ## Resnet18
 
