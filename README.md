@@ -39,9 +39,10 @@ Link to the third dataset:
 All three datasets are split into training and testing at 80/20 ratio.
 
 ## Augumentation
-
+I apply only one method of augumentation which is Random Resize Crop
 
 ## Normalization
+[0.5, 0.5, 0.5] is used for both mean and std
 
 # The model 
 ## Self-built neural network
